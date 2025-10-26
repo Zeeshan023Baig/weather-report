@@ -1,21 +1,24 @@
 @echo off
-chcp 65001 > nul
-echo Starting Weather Application...
+echo Starting Weather Application Build...
+echo Cleaning previous build...
+if exist out rmdir /s /q out
 
-echo Cleaning previous compilation...
-if exist bin rmdir /s /q bin
-mkdir bin
+echo Creating output directory...
+mkdir out
 
 echo Compiling all files...
-javac -cp ".;lib\*" -d bin src\db\*.java src\model\*.java src\weather\*.java src\Main.java
+javac -cp ".;mysql-connector-j-8.0.33.jar" -d out src\*.java src\db\*.java src\model\*.java src\weather\*.java
 
-if %errorlevel% neq 0 (
-    echo ERROR: Compilation failed!
-    pause
-    exit /b 1
+if %errorlevel% equ 0 (
+    echo.
+    echo ✅ Build successful!
+    echo 🚀 Running application...
+    echo.
+    java -cp "out;mysql-connector-j-8.0.33.jar" Main
+) else (
+    echo ---
+    echo ❌ ERROR: Compilation failed!
+    echo ---
 )
 
-echo Running Application...
-java -cp ".;bin;lib\*" Main
-
-pause
+pausea

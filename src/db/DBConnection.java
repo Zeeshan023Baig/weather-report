@@ -14,15 +14,18 @@ public class DBConnection {
             Class.forName("com.mysql.cj.jdbc.Driver");
             System.out.println("✅ MySQL JDBC Driver loaded successfully");
         } catch (ClassNotFoundException e) {
-            System.out.println("❌ MySQL JDBC Driver not found!");
+            System.err.println("❌ MySQL JDBC Driver not found!");
         }
     }
     
-    public static Connection getConnection() throws SQLException {
-        System.out.println("🔗 Attempting to connect to: " + URL);
-        System.out.println("👤 Username: " + USERNAME);
-        Connection conn = DriverManager.getConnection(URL, USERNAME, PASSWORD);
-        System.out.println("✅ Database connection successful!");
-        return conn;
+    public static Connection getConnection() {
+        try {
+            Connection conn = DriverManager.getConnection(URL, USERNAME, PASSWORD);
+            System.out.println("✅ Connected to MySQL database: weather_db");
+            return conn;
+        } catch (SQLException e) {
+            System.err.println("❌ MySQL connection failed: " + e.getMessage());
+            return null;
+        }
     }
 }
